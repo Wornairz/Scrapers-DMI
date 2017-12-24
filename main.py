@@ -6,7 +6,7 @@ import json
 from time import localtime, strftime
 
 url_esami = ["http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa=118", "http://web.dmi.unict.it/corsi/l-31/esami?sessione=2&aa=118", "http://web.dmi.unict.it/corsi/l-31/esami?sessione=3&aa=118"]
-status = {"status": { "length": "" , "lastupdate": strftime("%Y-%d-%m %H:%M:%S", localtime())}}
+status = {"length": "" , "lastupdate": strftime("%Y-%d-%m %H:%M:%S", localtime())}
 arr = ["prima", "seconda", "terza"]
 items = []
 anno = ""
@@ -36,5 +36,9 @@ for count, url in enumerate(url_esami):
 								(element[sessione]).append((all_td[i]).text)
 			else:
 				anno = td.b.text
-status["status"]["length"] = len(items);
-print json.dumps(items)
+status["length"] = len(items);
+finaljson = {"status" : status, "items" : items}
+#print json.dumbs(finaljson)
+with open('esami.json', 'w') as outfile:
+    json.dump(finaljson, outfile, sort_keys=True, indent=4)
+
