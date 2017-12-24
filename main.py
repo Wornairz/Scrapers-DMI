@@ -9,6 +9,7 @@ url_esami = ["http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa=118", "http
 status = {"status": { "length": "" , "lastupdate": strftime("%Y-%d-%m %H:%M:%S", localtime())}}
 arr = ["prima", "seconda", "terza"]
 items = []
+anno = ""
 for count, url in enumerate(url_esami):
 	sorgente = requests.get(url).text
 	soup = bs4.BeautifulSoup(sorgente, "html.parser")
@@ -21,7 +22,7 @@ for count, url in enumerate(url_esami):
 				all_td = tr.find_all("td")
 				sessione = arr[count]
 				if count == 0:
-					item = {"insegnamento" : "", "docenti" : "", sessione : []}
+					item = {"insegnamento" : "", "docenti" : "", sessione : [], "anno" : anno}
 					item["insegnamento"] = (all_td[1]).text
 					item["docenti"] = (all_td[2]).text
 					for i in range(len(all_td))[3:]:
@@ -33,5 +34,7 @@ for count, url in enumerate(url_esami):
 							element[sessione] = []
 							for i in range(len(all_td))[3:]:
 								(element[sessione]).append((all_td[i]).text)
-							#items.append(item)
+			else:
+				anno = td.b.text
+status["status"]["length"] = len(items);
 print json.dumps(items)
