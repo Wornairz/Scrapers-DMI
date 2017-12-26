@@ -17,8 +17,8 @@ for count, url in enumerate(url_esami):
 	all_tr = table.find_all("tr")
 	for tr in all_tr:
 		if not tr.has_attr("class"):
-			td = tr.find("td")
-			if not td.has_attr("class"):
+			firstd = tr.find("td")
+			if not firstd.has_attr("class"):
 				all_td = tr.find_all("td")
 				sessione = arr[count]
 				if count == 0:
@@ -26,7 +26,11 @@ for count, url in enumerate(url_esami):
 					item["insegnamento"] = (all_td[1]).text
 					item["docenti"] = (all_td[2]).text
 					for i in range(len(all_td))[3:]:
-						(item[sessione]).append((all_td[i]).text)
+						ses_temp = sessione
+						if (all_td[i]).has_attr("class"):
+							ses_temp = "straordinaria"
+							item[ses_temp] = []
+						(item[ses_temp]).append((all_td[i]).text)
 					items.append(item)
 				else:
 					for element in items:
@@ -35,10 +39,9 @@ for count, url in enumerate(url_esami):
 							for i in range(len(all_td))[3:]:
 								(element[sessione]).append((all_td[i]).text)
 			else:
-				anno = td.b.text
+				anno = firstd.b.text
 status["length"] = len(items);
 finaljson = {"status" : status, "items" : items}
-#print json.dumbs(finaljson)
 with open('esami.json', 'w') as outfile:
     json.dump(finaljson, outfile, sort_keys=True, indent=4)
 
