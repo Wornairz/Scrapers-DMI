@@ -22,22 +22,21 @@ for count, url in enumerate(url_esami):
 				all_td = tr.find_all("td")
 				sessione = arr[count]
 				if count == 0:
-					item = {"insegnamento" : "", "docenti" : "", sessione : [], "anno" : anno}
+					item = {"insegnamento" : "", "docenti" : "", "prima" : ["", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : anno}
 					item["insegnamento"] = (all_td[1]).text
 					item["docenti"] = (all_td[2]).text
 					for i in range(len(all_td))[3:]:
-						ses_temp = sessione
 						if (all_td[i]).has_attr("class"):
 							ses_temp = "straordinaria"
-							item[ses_temp] = []
-						(item[ses_temp]).append((all_td[i]).text)
+							(item[ses_temp])[i-3-2] = ((all_td[i]).text)
+						elif (all_td[i]).text.strip() != "":
+							(item[sessione])[i-3] = ((all_td[i]).text)
 					items.append(item)
 				else:
 					for element in items:
 						if (all_td[1]).text == element["insegnamento"]:
-							element[sessione] = []
 							for i in range(len(all_td))[3:]:
-								(element[sessione]).append((all_td[i]).text)
+								(element[sessione])[i-3] = ((all_td[i]).text)
 			else:
 				anno = firstd.b.text
 status["length"] = len(items);
