@@ -10,6 +10,20 @@ status = {"length": "" , "lastupdate": strftime("%Y-%d-%m %H:%M:%S", localtime()
 arr = ["prima", "seconda", "terza"]
 items = []
 anno = ""
+
+def inserisci(riga):
+	item = {"insegnamento" : "", "docenti" : "", "prima" : ["", "", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : anno}
+	item["insegnamento"] = (all_td[1]).text
+	item["docenti"] = (all_td[2]).text
+	for i in range(len(all_td))[3:]:
+		if (all_td[i]).has_attr("class"):
+			ses_temp = "straordinaria"
+			(item[ses_temp])[i-3-2] = ((all_td[i]).text)
+		elif (all_td[i]).text.strip() != "":
+			(item[sessione])[i-3] = ((all_td[i]).text)
+	items.append(item)
+	
+
 for count, url in enumerate(url_esami):
 	sorgente = requests.get(url).text
 	soup = bs4.BeautifulSoup(sorgente, "html.parser")
@@ -22,24 +36,19 @@ for count, url in enumerate(url_esami):
 				all_td = tr.find_all("td")
 				sessione = arr[count]
 				if count == 0:
-					item = {"insegnamento" : "", "docenti" : "", "prima" : ["", ""], "seconda" : ["", ""], "terza" : ["", ""], "straordinaria" : ["", ""], "anno" : anno}
-					item["insegnamento"] = (all_td[1]).text
-					item["docenti"] = (all_td[2]).text
-					for i in range(len(all_td))[3:]:
-						if (all_td[i]).has_attr("class"):
-							ses_temp = "straordinaria"
-							(item[ses_temp])[i-3-2] = ((all_td[i]).text)
-						elif (all_td[i]).text.strip() != "":
-							(item[sessione])[i-3] = ((all_td[i]).text)
-					items.append(item)
+					inserisci(all_td)
 				else:
+					flag = False
 					for element in items:
 						if (all_td[1]).text == element["insegnamento"]:
+							flag = True
 							for i in range(len(all_td))[3:]:
 								(element[sessione])[i-3] = ((all_td[i]).text)
+					if not flag:
+						inserisci(all_td)					
 			else:
 				anno = firstd.b.text
-status["length"] = len(items);
+status["length"] = len(items)
 finaljson = {"status" : status, "items" : items}
 with open('esami.json', 'w') as outfile:
     json.dump(finaljson, outfile, sort_keys=True, indent=4)
