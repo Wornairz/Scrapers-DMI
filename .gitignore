@@ -1,0 +1,17 @@
+# Eclipse
+.classpath
+.project
+Scraper-Materie-UNICT/.settings/
+
+# Intellij
+Scraper-Materie-UNICT/.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+Scraper-Materie-UNICT/log/
+Scraper-Materie-UNICT/target/
+*.class
