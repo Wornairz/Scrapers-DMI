@@ -6,7 +6,7 @@ import json
 from time import localtime, strftime
 
 def main():
-	annoEsami = "118" # 2017/2018
+	annoEsami = "120" # 2017/2018
 	url_esami = {
 		"l-31":	[ # Informatica Triennale
 			"http://web.dmi.unict.it/corsi/l-31/esami?sessione=1&aa="+annoEsami,
