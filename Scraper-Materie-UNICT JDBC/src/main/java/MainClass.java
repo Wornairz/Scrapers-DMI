@@ -4,6 +4,8 @@ import java.util.List;
 public class MainClass {
 	
 	public static void main(String[] args) {
+		DBUtility db = DBUtility.getInstance();
+		
 		String[] links = {
 					"http://web.dmi.unict.it/corsi/l-31/programmi", 
 					"http://web.dmi.unict.it/corsi/l-35/programmi", 
@@ -14,7 +16,6 @@ public class MainClass {
 		
 		for(String link : links) {
 			List<Materia> materie = ScraperMaterie.scrape(link);
-			DBUtility db = DBUtility.getInstance();
 			for(Materia materia : materie) {
 				try {
 					db.query("INSERT INTO Materie(id, nome, anno, semestre) "
@@ -26,6 +27,12 @@ public class MainClass {
 			}
 		}
 		
+		try {
+			db.query("SELECT * FROM Materie");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Terminated");
 	
 	}

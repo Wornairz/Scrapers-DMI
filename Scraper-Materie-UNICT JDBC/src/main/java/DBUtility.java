@@ -29,8 +29,14 @@ public class DBUtility {
 	public void query(String sql) throws SQLException {
 		//System.out.println(sql);
 		if(sql.startsWith("SELECT")) {
-			ResultSet rs = null;
-			rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				String nome = rs.getString("nome");
+				int anno = rs.getInt("anno");
+				String semestre = rs.getString("semestre");
+				System.out.println(id + " " + nome + " - " + anno + "° anno" + " " + semestre + " semestre");
+			}
 		}
 		else if(sql.startsWith("INSERT")) {
 			stmt.executeUpdate(sql);
